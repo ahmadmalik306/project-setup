@@ -1,12 +1,13 @@
 import React from 'react';
 import './App.css';
+import { Providers } from './providers';
 import { Users } from './containers/users';
 
 function App() {
     return (
-        <div className='App'>
+        <Providers>
             <Users />
-        </div>
+        </Providers>
     );
 }
 

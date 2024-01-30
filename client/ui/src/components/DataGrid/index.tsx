@@ -5,28 +5,47 @@ import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { DataGridPro } from '@mui/x-data-grid-pro';
+import { Button, Pagination } from '@mui/material';
 
 function ApplyFilter(props) {
     const { colDef, setColumnFilters, columnFilters, rows, ...rest } = props;
+    const [value, setValue] = React.useState('');
+    const menuItems = [`All ${rest?.field}`, ...rows]?.map((row) =>
+        typeof row === 'object' ? row[rest.field] : row
+    );
 
-    const [value, setValue] = React.useState(columnFilters?.[rest?.field]);
-    const menuItems = rows?.map((row) => row[rest.field]);
-    React.useEffect(() => {}, [value]);
+    React.useEffect(() => {
+        rest?.field && setValue(`All ${rest?.field}`);
+    }, []);
+
     const handleChange = React.useCallback(
         (event) => {
-            setValue(event.target.value);
-            let newObj = {};
-            if (columnFilters) {
-                Object.entries(columnFilters)?.forEach(([key, value]) => {
-                    if (key === rest?.field) {
-                        newObj[key] = event.target.value;
-                    } else {
-                        newObj[key] = value;
-                    }
-                });
-                setColumnFilters(newObj);
+            // console.log(event.target.value, columnFilters);
+            if (event.target.value === `All ${rest?.field}`) {
+                setColumnFilters({});
+                setValue(event.target.value);
             } else {
-                setColumnFilters({ [rest?.field]: event.target.value });
+                setValue(event.target.value);
+                let newObj = {};
+                if (columnFilters && Object.keys(columnFilters).length) {
+                    console.log('if', columnFilters);
+
+                    Object.entries(columnFilters)?.forEach(([key, value]) => {
+                        if (key === rest?.field) {
+                            newObj[key] = event.target.value;
+                        } else {
+                            newObj[key] = value;
+                        }
+                    });
+                    if (!Object.keys(columnFilters).includes(rest?.field)) {
+                        newObj[rest?.field] = event.target.value;
+                    }
+                    console.log('ui', newObj, columnFilters);
+                    setColumnFilters(newObj);
+                } else {
+                    console.log('else', columnFilters);
+                    setColumnFilters({ [rest?.field]: event.target.value });
+                }
             }
         },
         [columnFilters]
@@ -38,11 +57,12 @@ function ApplyFilter(props) {
             <Select
                 labelId='select-is-admin-label'
                 id='select-is-admin'
+                defaultValue={value}
                 value={value}
                 onChange={handleChange}
                 label={rest?.field}
             >
-                {menuItems?.map((value, index) => {
+                {[...menuItems]?.map((value, index) => {
                     return (
                         <MenuItem key={index} value={value}>
                             {value}
@@ -62,11 +82,13 @@ export const DataGrid = ({
     isLoading,
     paginationModel,
     setPaginationModel,
-    paginationMode
+    toolbarActionsMode,
+    handleSortModelChange
 }) => {
-    console.log('paginationMode: ', paginationMode, tableRows);
+    console.log(tableRows);
     const [rows, setRows] = React.useState(tableRows);
     const [columnFilters, setColumnFilters] = React.useState();
+    console.log(columnFilters);
 
     const columnData = React.useMemo(
         () =>
@@ -116,35 +138,66 @@ export const DataGrid = ({
             // setColumnFilters(newObj);
         }
     }, [tableRows]);
+
+    // const CustomPagination = (props) => {
+    //     return (
+    //         <>
+    //             <Button>First</Button>
+    //             <Pagination
+    //                 variant='outlined'
+    //                 shape='rounded'
+    //                 page={props.page}
+    //                 count={props.count}
+    //                 onChange={props.onChange}
+    //             />
+    //             <Button>Last</Button>
+    //         </>
+    //     );
+    // };
+
+    // const handlePaginationChange = (event, value) => {
+    //     setPaginationModel((prev) => ({
+    //         ...prev,
+    //         page: value
+    //     }));
+    // };
+
     return (
         <div style={{ height: 400, width: '100%' }}>
             <DataGridPro
-                /////////////////client below//////////////////////
-                // rows={rows}
-                // columns={columnData}
-
-                // pagination
-                pageSizeOptions={[5, 10, 25]}
-                /////////////////////////server below///////////////////////////////
-                {...(paginationMode === 'server' && {
+                {...(toolbarActionsMode === 'server' && {
                     rowCount: rowCount,
-                    loading: isLoading
+                    loading: isLoading,
+                    paginationModel: paginationModel,
+                    onPaginationModelChange: setPaginationModel,
+                    onSortModelChange: handleSortModelChange
                 })}
                 initialState={{
                     pagination: {
                         paginationModel: {
-                            page: 1,
-                            pageSize: 10
+                            page: 0,
+                            pageSize: 5
                         }
                     }
                 }}
-                paginationModel={paginationModel}
-                onPaginationModelChange={setPaginationModel}
                 rows={rows}
                 columns={columnData}
                 pagination
-                paginationMode={paginationMode}
-                // pageSizeOptions={[5, 10, 25]}
+                paginationMode={toolbarActionsMode}
+                sortingMode={toolbarActionsMode}
+                pageSizeOptions={[5, 10, 25]}
+                // slots={{
+                //     pagination: CustomPagination
+                // }}
+                // slotProps={{
+                //     pagination: {
+                //         page: paginationModel?.page,
+                //         count: Math.ceil(
+                //             tableRows?.length / paginationModel?.pageSize
+                //         ),
+                //         onChange: handlePaginationChange
+                //     }
+                // }}
                 disableColumnFilter
             />
         </div>

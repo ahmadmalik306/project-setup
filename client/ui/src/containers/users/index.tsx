@@ -3,48 +3,48 @@ import { Tooltip, Typography } from '@mui/material';
 import { useDataTable } from '../../hooks';
 
 export const Users = () => {
-    // const columns = [
-    //     //client
-    //     {
-    //         headerName: `Name`,
-    //         field: 'name',
-    //         minWidth: 100,
-    //         headerFilter: true,
-    //         searchable: true,
-    //         renderCell: ({ value, tabIndex }) => (
-    //             <Tooltip title={value} placement='top-end'>
-    //                 <Typography tabIndex={tabIndex}>{value}</Typography>
-    //             </Tooltip>
-    //         ),
-    //         cellClassName: 'remove-border'
-    //     },
-    //     {
-    //         headerName: `Website`,
-    //         field: 'website',
-    //         headerFilter: true,
-    //         minWidth: 100,
-    //         searchable: true,
-    //         renderCell: ({ value, tabIndex }) => (
-    //             <Tooltip title={value} placement='top-end'>
-    //                 <Typography tabIndex={tabIndex}>{value}</Typography>
-    //             </Tooltip>
-    //         )
-    //     },
-    //     {
-    //         headerName: `Phone`,
-    //         field: 'phone',
-    //         headerFilter: false,
-    //         minWidth: 130,
-    //         searchable: true,
-    //         renderCell: ({ value, tabIndex }) => (
-    //             <Tooltip title={value} placement='top-end'>
-    //                 <Typography tabIndex={tabIndex}>{value}</Typography>
-    //             </Tooltip>
-    //         )
-    //     }
-    // ];
+    const columnsClient = [
+        //client
+        {
+            headerName: `Name`,
+            field: 'name',
+            minWidth: 100,
+            headerFilter: true,
+            searchable: true,
+            renderCell: ({ value, tabIndex }) => (
+                <Tooltip title={value} placement='top-end'>
+                    <Typography tabIndex={tabIndex}>{value}</Typography>
+                </Tooltip>
+            ),
+            cellClassName: 'remove-border'
+        },
+        {
+            headerName: `Website`,
+            field: 'website',
+            headerFilter: true,
+            minWidth: 100,
+            searchable: true,
+            renderCell: ({ value, tabIndex }) => (
+                <Tooltip title={value} placement='top-end'>
+                    <Typography tabIndex={tabIndex}>{value}</Typography>
+                </Tooltip>
+            )
+        },
+        {
+            headerName: `Phone`,
+            field: 'phone',
+            headerFilter: false,
+            minWidth: 130,
+            searchable: true,
+            renderCell: ({ value, tabIndex }) => (
+                <Tooltip title={value} placement='top-end'>
+                    <Typography tabIndex={tabIndex}>{value}</Typography>
+                </Tooltip>
+            )
+        }
+    ];
 
-    const columns = [
+    const columnsServer = [
         //server
         {
             headerName: `Desk`,
@@ -87,15 +87,16 @@ export const Users = () => {
     const { dataGrid } = useDataTable({
         directoryConfig: {
             config: {
-                columns,
-                paginationMode: 'server'
+                // columns: columnsClient,
+                columns: columnsServer,
+                toolbarActionsMode: 'server',
+                multiSort: false
             }
         }
     });
     return (
         <div>
-            Hello
-            <Typography>ffff</Typography>
+            <Typography sx={{ textAlign: 'center' }}>DATAGRID</Typography>
             {dataGrid}
         </div>
     );

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tooltip, Typography } from '@mui/material';
-import { useDataTable } from '../../hooks';
+import { useDataTable } from '@hooks';
 
 export const Users = () => {
     const columnsClient = [

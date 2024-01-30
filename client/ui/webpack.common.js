@@ -46,6 +46,17 @@ module.exports = {
   },
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
+    alias: {
+      "@hooks": path.resolve(__dirname, "./src/hooks"),
+      "@components": path.resolve(__dirname, "./src/components"),
+      "@containers": path.resolve(__dirname, "./src/containers"),
+      "@providers": path.resolve(__dirname, "./src/providers"),
+      "@pages": path.resolve(__dirname, "./src/pages"),
+      "@routes": path.resolve(__dirname, "./src/routes"),
+      "@styles": path.resolve(__dirname, "./src/styles"),
+      "@utils": path.resolve(__dirname, "./src/utils"),
+      "@types": path.resolve(__dirname, "./src/types"),
+    },
   },
   plugins: [
     htmlPlugin,

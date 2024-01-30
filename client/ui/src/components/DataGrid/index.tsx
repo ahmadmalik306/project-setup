@@ -85,10 +85,8 @@ export const DataGrid = ({
     toolbarActionsMode,
     handleSortModelChange
 }) => {
-    console.log(tableRows);
     const [rows, setRows] = React.useState(tableRows);
     const [columnFilters, setColumnFilters] = React.useState();
-    console.log(columnFilters);
 
     const columnData = React.useMemo(
         () =>

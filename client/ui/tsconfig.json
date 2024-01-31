@@ -15,6 +15,18 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "baseUrl": "src",
+    "paths":{
+      "@hooks": [ "./hooks" ],
+      "@components": [ "./components" ],
+      "@containers": [ "./containers" ],
+      "@providers": [ "./providers" ],
+      "@pages": [ "./pages" ],
+      "@routes": [ "./routes" ],
+      "@styles": [ "./styles" ],
+      "@utils": [ "./utils" ],
+      "@types": [ "./types" ],
+    }
   },
   "exclude": ["node_modules"],
   "include": ["src/**/*"],

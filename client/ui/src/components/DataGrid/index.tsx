@@ -20,16 +20,17 @@ function ApplyFilter(props) {
 
     const handleChange = React.useCallback(
         (event) => {
-            // console.log(event.target.value, columnFilters);
             if (event.target.value === `All ${rest?.field}`) {
-                setColumnFilters({});
+                setColumnFilters((prevFilters) => {
+                    const { [rest?.field]: excludedValue, ...newFilters } =
+                        prevFilters;
+                    return newFilters;
+                });
                 setValue(event.target.value);
             } else {
                 setValue(event.target.value);
                 let newObj = {};
                 if (columnFilters && Object.keys(columnFilters).length) {
-                    console.log('if', columnFilters);
-
                     Object.entries(columnFilters)?.forEach(([key, value]) => {
                         if (key === rest?.field) {
                             newObj[key] = event.target.value;
@@ -40,10 +41,8 @@ function ApplyFilter(props) {
                     if (!Object.keys(columnFilters).includes(rest?.field)) {
                         newObj[rest?.field] = event.target.value;
                     }
-                    console.log('ui', newObj, columnFilters);
                     setColumnFilters(newObj);
                 } else {
-                    console.log('else', columnFilters);
                     setColumnFilters({ [rest?.field]: event.target.value });
                 }
             }
@@ -197,6 +196,7 @@ export const DataGrid = ({
                 //     }
                 // }}
                 disableColumnFilter
+                disableColumnMenu
             />
         </div>
     );

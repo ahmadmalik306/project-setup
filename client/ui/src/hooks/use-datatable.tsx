@@ -24,8 +24,6 @@ export const useDataTable = ({
         sort: []
     });
 
-    // console.log('fetchOptions: ', fetchOptions);
-
     useEffect(() => {
         setFetchOptions(
             pagination
@@ -69,8 +67,7 @@ export const useDataTable = ({
         rowLength: 100,
         visibleFields: ['name', 'website', 'phone']
     });
-    // console.log('columns: ', columns, clientSidePaginationData);
-    // console.log(data, rows, rowCountState, paginationModel);
+
     return {
         dataGrid: (
             <DataGrid

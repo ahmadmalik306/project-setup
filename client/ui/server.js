@@ -19,7 +19,6 @@ const server = new WebpackDevServer(
     historyApiFallback: true,
     port,
     host,
-    // ...
   },
   compiler
 );

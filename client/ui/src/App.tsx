@@ -1,12 +1,12 @@
 import React from 'react';
 import './App.css';
 import { Providers } from './providers';
-import { Users } from './containers/users';
+import { Home } from './containers/Home';
 
 function App() {
     return (
         <Providers>
-            <Users />
+            <Home />
         </Providers>
     );
 }

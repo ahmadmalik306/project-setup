@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { Box } from '@mui/material';
+import { Box, List } from '@mui/material';
 import { Divider } from '@mui/material';
 import { AnimatedCollapse, Content } from './styles';
 import { COLORS } from '../../utils';
-import { SimpleMenu } from './category';
+import { Navbar } from './navbar';
 
 export const PageHeader = ({ isOpen, isSmallScreen }) => {
     const contentRef = React.useRef(null);
@@ -17,11 +17,11 @@ export const PageHeader = ({ isOpen, isSmallScreen }) => {
     const drawer = (
         <Box sx={{ margin: 0, marginBottom: 1 }}>
             <Divider />
-            <Box sx={{ display: 'flex' }}>
-                {['All mail', 'Trash', 'Spam']?.map((value) => (
-                    <SimpleMenu value={value} />
+            <List sx={isSmallScreen ? {} : { display: 'flex' }}>
+                {['All mail', 'Trash', 'Spam']?.map((value, index) => (
+                    <Navbar value={value} index={index} />
                 ))}
-            </Box>
+            </List>
             <Divider />
         </Box>
     );

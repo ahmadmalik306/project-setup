@@ -17,7 +17,7 @@ export const useDataTable = ({
     };
     const [paginationModel, setPaginationModel] = React.useState({
         page: 0,
-        pageSize: 5
+        pageSize: 10
     });
 
     const [fetchOptions, setFetchOptions] = React.useState({
@@ -67,7 +67,6 @@ export const useDataTable = ({
         rowLength: 100,
         visibleFields: ['name', 'website', 'phone']
     });
-
     return {
         dataGrid: (
             <DataGrid
@@ -85,6 +84,7 @@ export const useDataTable = ({
                     : {
                           tableRows: clientSidePaginationData?.rows,
                           toolbarActionsMode,
+                          rowCount: clientSidePaginationData?.rows?.length,
                           paginationModel,
                           setPaginationModel: setPaginationModel
                       })}

@@ -126,20 +126,27 @@ export const DataGrid = ({
     React.useEffect(() => {
         if (tableRows?.length) {
             setRows(tableRows);
-            // let newObj = {};
-            // columns?.forEach((column) => {
-            //     if (column?.headerFilter) {
-            //         newObj[column.field] = tableRows?.[0]?.[column?.field];
-            //     }
-            // });
-            // setColumnFilters(newObj);
         }
     }, [tableRows]);
 
     // const CustomPagination = (props) => {
+    //     console.log(props, paginationModel);
+    //     const handleLastPageClick = () => {
+    //         const lastPage = Math.ceil(rowCount / paginationModel.pageSize);
+    //         props.onChange(null, lastPage); // Simulate the onChange callback to navigate to the last page
+    //     };
     //     return (
     //         <>
-    //             <Button>First</Button>
+    //             <Button
+    //                 onClick={() =>
+    //                     setPaginationModel({
+    //                         page: 1,
+    //                         pageSize: paginationModel.pageSize
+    //                     })
+    //                 }
+    //             >
+    //                 First
+    //             </Button>
     //             <Pagination
     //                 variant='outlined'
     //                 shape='rounded'
@@ -147,7 +154,7 @@ export const DataGrid = ({
     //                 count={props.count}
     //                 onChange={props.onChange}
     //             />
-    //             <Button>Last</Button>
+    //             <Button onClick={handleLastPageClick}>Last</Button>
     //         </>
     //     );
     // };
@@ -157,6 +164,17 @@ export const DataGrid = ({
     //         ...prev,
     //         page: value
     //     }));
+
+    //     // Calculate the start index of the new page
+    //     const startIndex = (value - 1) * paginationModel.pageSize;
+
+    //     // Slice the tableRows array to get the rows for the current page
+    //     const newRows = tableRows.slice(
+    //         startIndex,
+    //         startIndex + paginationModel.pageSize
+    //     );
+    //     console.log(newRows);
+    //     setRows(newRows);
     // };
 
     return (
@@ -171,10 +189,7 @@ export const DataGrid = ({
                 })}
                 initialState={{
                     pagination: {
-                        paginationModel: {
-                            page: 0,
-                            pageSize: 5
-                        }
+                        paginationModel: paginationModel // client
                     }
                 }}
                 rows={rows}
@@ -189,9 +204,7 @@ export const DataGrid = ({
                 // slotProps={{
                 //     pagination: {
                 //         page: paginationModel?.page,
-                //         count: Math.ceil(
-                //             tableRows?.length / paginationModel?.pageSize
-                //         ),
+                //         count: Math.ceil(rowCount / paginationModel?.pageSize),
                 //         onChange: handlePaginationChange
                 //     }
                 // }}

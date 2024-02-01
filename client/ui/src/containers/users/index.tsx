@@ -43,12 +43,11 @@ export const Users = () => {
             )
         }
     ];
-
     const columnsServer = [
         //server
         {
             headerName: `Desk`,
-            field: 'desk',
+            field: 'full_name',
             minWidth: 100,
             headerFilter: true,
             searchable: true,
@@ -61,7 +60,7 @@ export const Users = () => {
         },
         {
             headerName: `Commodity`,
-            field: 'commodity',
+            field: 'description',
             headerFilter: true,
             minWidth: 100,
             searchable: true,
@@ -73,7 +72,7 @@ export const Users = () => {
         },
         {
             headerName: `TraderEmail`,
-            field: 'traderEmail',
+            field: 'email',
             headerFilter: false,
             minWidth: 130,
             searchable: true,
@@ -87,9 +86,9 @@ export const Users = () => {
     const { dataGrid } = useDataTable({
         directoryConfig: {
             config: {
-                // columns: columnsClient,
-                columns: columnsServer,
-                toolbarActionsMode: 'server',
+                columns: columnsClient,
+                // columns: columnsServer,
+                toolbarActionsMode: 'client',
                 multiSort: false
             }
         }

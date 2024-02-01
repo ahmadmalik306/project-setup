@@ -1,2 +1,1 @@
-import { COLORS } from './colors';
-export { COLORS };
+export { COLORS } from './colors';

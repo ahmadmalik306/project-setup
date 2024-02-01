@@ -6,6 +6,7 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { DataGridPro } from '@mui/x-data-grid-pro';
 import { Button, Pagination } from '@mui/material';
+import { StyledContainer } from './styles';
 
 function ApplyFilter(props) {
     const { colDef, setColumnFilters, columnFilters, rows, ...rest } = props;
@@ -78,7 +79,7 @@ export const DataGrid = ({
     columns,
     data,
     rowCount,
-    isLoading,
+    isLoading = false,
     paginationModel,
     setPaginationModel,
     toolbarActionsMode,
@@ -129,67 +130,72 @@ export const DataGrid = ({
         }
     }, [tableRows]);
 
-    // const CustomPagination = (props) => {
-    //     console.log(props, paginationModel);
-    //     const handleLastPageClick = () => {
-    //         const lastPage = Math.ceil(rowCount / paginationModel.pageSize);
-    //         props.onChange(null, lastPage); // Simulate the onChange callback to navigate to the last page
-    //     };
-    //     return (
-    //         <>
-    //             <Button
-    //                 onClick={() =>
-    //                     setPaginationModel({
-    //                         page: 1,
-    //                         pageSize: paginationModel.pageSize
-    //                     })
-    //                 }
-    //             >
-    //                 First
-    //             </Button>
-    //             <Pagination
-    //                 variant='outlined'
-    //                 shape='rounded'
-    //                 page={props.page}
-    //                 count={props.count}
-    //                 onChange={props.onChange}
-    //             />
-    //             <Button onClick={handleLastPageClick}>Last</Button>
-    //         </>
-    //     );
-    // };
+    const CustomPagination = (props) => {
+        const handleLastPageClick = () => {
+            const lastPage = Math.ceil(rowCount / paginationModel.pageSize);
+            props.onChange(null, lastPage);
+        };
+        return (
+            <>
+                <Button
+                    onClick={() => {
+                        setPaginationModel({
+                            page: 1,
+                            pageSize: paginationModel.pageSize
+                        });
+                        props.onChange(null, 1);
+                    }}
+                >
+                    First
+                </Button>
+                <Pagination
+                    variant='outlined'
+                    shape='rounded'
+                    page={props.page}
+                    count={props.count}
+                    onChange={props.onChange}
+                />
+                <Button onClick={handleLastPageClick}>Last</Button>
+            </>
+        );
+    };
 
-    // const handlePaginationChange = (event, value) => {
-    //     setPaginationModel((prev) => ({
-    //         ...prev,
-    //         page: value
-    //     }));
+    const handlePaginationChange = (event, value) => {
+        setPaginationModel((prev) => ({
+            ...prev,
+            page: value
+        }));
 
-    //     // Calculate the start index of the new page
-    //     const startIndex = (value - 1) * paginationModel.pageSize;
+        // Calculate the start index of the new page
+        const startIndex = (value - 1) * paginationModel.pageSize;
 
-    //     // Slice the tableRows array to get the rows for the current page
-    //     const newRows = tableRows.slice(
-    //         startIndex,
-    //         startIndex + paginationModel.pageSize
-    //     );
-    //     console.log(newRows);
-    //     setRows(newRows);
-    // };
+        // Slice the tableRows array to get the rows for the current page
+        const newRows = tableRows.slice(
+            startIndex,
+            startIndex + paginationModel.pageSize
+        );
+        setRows(newRows);
+    };
 
     return (
-        <div style={{ height: 400, width: '100%' }}>
+        <StyledContainer>
             <DataGridPro
                 {...(toolbarActionsMode === 'server' && {
                     rowCount: rowCount,
                     loading: isLoading,
-                    paginationModel: paginationModel,
-                    onPaginationModelChange: setPaginationModel,
+                    // paginationModel: paginationModel,
+                    // onPaginationModelChange: setPaginationModel,
                     onSortModelChange: handleSortModelChange
                 })}
                 initialState={{
                     pagination: {
-                        paginationModel: paginationModel // client
+                        paginationModel:
+                            toolbarActionsMode === 'server'
+                                ? paginationModel
+                                : {
+                                      ...paginationModel,
+                                      page: paginationModel?.page - 1
+                                  } // client
                     }
                 }}
                 rows={rows}
@@ -198,19 +204,19 @@ export const DataGrid = ({
                 paginationMode={toolbarActionsMode}
                 sortingMode={toolbarActionsMode}
                 pageSizeOptions={[5, 10, 25]}
-                // slots={{
-                //     pagination: CustomPagination
-                // }}
-                // slotProps={{
-                //     pagination: {
-                //         page: paginationModel?.page,
-                //         count: Math.ceil(rowCount / paginationModel?.pageSize),
-                //         onChange: handlePaginationChange
-                //     }
-                // }}
+                slots={{
+                    pagination: CustomPagination
+                }}
+                slotProps={{
+                    pagination: {
+                        page: paginationModel?.page,
+                        count: Math.ceil(rowCount / paginationModel?.pageSize),
+                        onChange: handlePaginationChange
+                    }
+                }}
                 disableColumnFilter
                 disableColumnMenu
             />
-        </div>
+        </StyledContainer>
     );
 };

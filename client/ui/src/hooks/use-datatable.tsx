@@ -12,12 +12,14 @@ export const useDataTable = ({
         }
     }
 }) => {
-    const SERVER_OPTIONS = {
-        useCursorPagination: false
-    };
+    // const SERVER_OPTIONS = {
+    //     useCursorPagination: false
+    // };
+    const [backendRows, setBackendRows] = useState([]);
+    const [rowCount, setRowCount] = useState(1);
     const [paginationModel, setPaginationModel] = React.useState({
-        page: 0,
-        pageSize: 10
+        page: 1,
+        pageSize: 5
     });
 
     const [fetchOptions, setFetchOptions] = React.useState({
@@ -46,25 +48,41 @@ export const useDataTable = ({
         });
     };
 
-    const { useQuery, ...data } = createFakeServer({}, SERVER_OPTIONS);
-    const { isLoading, rows, pageInfo } = useQuery(paginationModel);
-    const [rowCountState, setRowCountState] = useState(
-        pageInfo?.totalRowCount || 0
-    );
-
-    React.useEffect(() => {
-        toolbarActionsMode === 'server' &&
-            setRowCountState((prevRowCountState) =>
-                pageInfo?.totalRowCount !== undefined
-                    ? pageInfo?.totalRowCount
-                    : prevRowCountState
+    // const { useQuery, ...data } = createFakeServer({}, SERVER_OPTIONS);
+    // const { isLoading, rows, pageInfo } = useQuery(paginationModel);
+    // const [rowCountState, setRowCountState] = useState(
+    //     pageInfo?.totalRowCount || 0
+    // );
+    const fetchAPI = async () => {
+        try {
+            const resp = await fetch(
+                `https://hbv2-api.nmxglobalsoftware.com/api/hbv2-user/v1/users?page=${paginationModel.page}&perPage=${paginationModel.pageSize}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-type': 'Application/json',
+                        Accept: 'Application/json'
+                    }
+                }
             );
-    }, [pageInfo?.totalRowCount, setRowCountState]);
+            return resp.json();
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    useEffect(() => {
+        fetchAPI()
+            .then((data) => {
+                setBackendRows(data?.data);
+                setRowCount(data.total);
+            })
+            .catch((err) => console.log({ err }));
+    }, [paginationModel]);
 
     const { data: clientSidePaginationData } = useDemoData({
         //client side
         dataSet: 'Employee',
-        rowLength: 100,
+        rowLength: 50,
         visibleFields: ['name', 'website', 'phone']
     });
     return {
@@ -73,9 +91,8 @@ export const useDataTable = ({
                 columns={columns}
                 {...(toolbarActionsMode === 'server'
                     ? {
-                          tableRows: rows,
-                          isLoading,
-                          rowCount: rowCountState,
+                          tableRows: backendRows,
+                          rowCount: rowCount,
                           toolbarActionsMode,
                           paginationModel,
                           setPaginationModel: setPaginationModel,

@@ -17,8 +17,8 @@ export const PageHeader = ({ isOpen, isSmallScreen }) => {
     const drawer = (
         <Box sx={{ margin: 0, marginBottom: 1 }}>
             <Divider />
-            <List sx={isSmallScreen ? {} : { display: 'flex' }}>
-                {['All mail', 'Trash', 'Spam']?.map((value, index) => (
+            <List sx={isSmallScreen ? {} : { display: 'flex' }} disablePadding>
+                {['Content', 'Applications', 'People']?.map((value, index) => (
                     <Navbar value={value} index={index} />
                 ))}
             </List>

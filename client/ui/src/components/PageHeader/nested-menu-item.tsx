@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, MenuItem } from '@mui/material';
+import { Grid, Menu, MenuItem } from '@mui/material';
 import ArrowRight from '@mui/icons-material/ArrowRight';
 export const NestedMenuItem = React.forwardRef((props, ref) => {
     const {
@@ -101,7 +101,7 @@ export const NestedMenuItem = React.forwardRef((props, ref) => {
         <div
             {...ContainerProps}
             ref={containerRef}
-            onFocus={handleFocus}
+            // onFocus={handleFocus}
             tabIndex={tabIndex}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
@@ -112,11 +112,21 @@ export const NestedMenuItem = React.forwardRef((props, ref) => {
                 data-open={!!open || undefined}
                 className={className}
                 ref={menuItemRef}
-                keepOpen={keepOpen}
+                sx={{
+                    padding: '8px 8px 8px 16px',
+                    minWidth: '10rem'
+                }}
             >
-                {label}
-                <div style={{ flexGrow: 1 }} />
-                {rightIcon}
+                <Grid
+                    container
+                    justifyContent='space-between'
+                    marginRight={0.5}
+                >
+                    <Grid item>{label}</Grid>
+                    <Grid item sx={{ position: 'flex-end' }}>
+                        {rightIcon}
+                    </Grid>
+                </Grid>
             </MenuItem>
             <Menu
                 hideBackdrop

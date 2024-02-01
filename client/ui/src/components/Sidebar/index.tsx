@@ -4,6 +4,8 @@ import {
     BottomNavigation,
     BottomNavigationAction,
     Grid,
+    InputAdornment,
+    TextField,
     useMediaQuery
 } from '@mui/material';
 import { Box } from '@mui/material';
@@ -22,8 +24,10 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Toolbar } from '@mui/material';
 import { PageHeader } from '../PageHeader';
 import { Users } from '../../containers/users/index';
+import { Branding, Eye, Heartbeat, Logo } from '../../assets/icons';
+import { COLORS } from '@utils';
 
-const drawerWidth = 240;
+const drawerWidth = 200;
 
 interface Props {
     /**
@@ -49,19 +53,50 @@ export default function ResponsiveDrawer(props: Props) {
     }, [isSmallScreen]);
     const drawer = (
         <Box>
-            {!isSmallScreen && <Toolbar />}
-            <Divider />
-            <List>
-                {['Inbox', 'Starred', 'Send email', 'Drafts'].map(
+            <Toolbar />
+            <Box sx={{ padding: '1.5rem 1rem' }}>
+                <TextField
+                    inputProps={{
+                        sx: {
+                            padding: '8px',
+                            fontSize: 11,
+                            '&::placeholder': {
+                                fontSize: 11
+                            }
+                        }
+                    }}
+                    InputProps={{
+                        sx: {
+                            borderRadius: '1rem'
+                        },
+                        startAdornment: (
+                            <InputAdornment position='start'>
+                                <Eye />
+                            </InputAdornment>
+                        )
+                    }}
+                    placeholder='View as user...'
+                    size='small'
+                    fullWidth
+                />
+            </Box>
+            <List disablePadding>
+                {['Home', 'Design Studio', 'Gallery', 'Performance'].map(
                     (text, index) => (
                         <ListItem key={text} disablePadding>
-                            <ListItemButton>
+                            <ListItemButton
+                                sx={{
+                                    padding: '1.5rem 1rem',
+                                    boxShadow:
+                                        '-3px -3px 10px rgba(0, 0, 0, 0.3) inset',
+                                    ':hover': {
+                                        background: COLORS.darkGray,
+                                        color: 'white'
+                                    }
+                                }}
+                            >
                                 <ListItemIcon>
-                                    {index % 2 === 0 ? (
-                                        <InboxIcon />
-                                    ) : (
-                                        <MailIcon />
-                                    )}
+                                    {index % 2 === 0 ? <Heartbeat /> : <Logo />}
                                 </ListItemIcon>
                                 <ListItemText primary={text} />
                             </ListItemButton>
@@ -94,24 +129,36 @@ export default function ResponsiveDrawer(props: Props) {
             <AppBar
                 position={isSmallScreen ? 'static' : 'sticky'}
                 ref={containerRef}
+                sx={{ background: 'black' }}
             >
                 <Toolbar>
-                    <Grid container display='block'>
-                        <Grid
-                            display={!isSmallScreen ? 'flex' : 'initial'}
-                            alignItems='center'
-                        >
-                            <IconButton
-                                color='inherit'
-                                aria-label='open drawer'
-                                edge='start'
-                                onClick={handleDrawerToggle}
-                                sx={{ mr: 2, display: { sm: 'none' } }}
+                    {isSmallScreen ? (
+                        <Grid container display='block'>
+                            <Grid
+                                display={!isSmallScreen ? 'flex' : 'initial'}
+                                alignItems='center'
                             >
-                                {mobileOpen ? <CloseIcon /> : <MenuIcon />}
-                            </IconButton>
+                                <IconButton
+                                    color='inherit'
+                                    aria-label='open drawer'
+                                    edge='start'
+                                    onClick={handleDrawerToggle}
+                                    sx={{ mr: 2 }}
+                                >
+                                    {mobileOpen ? <CloseIcon /> : <MenuIcon />}
+                                </IconButton>
+                            </Grid>
                         </Grid>
-                    </Grid>
+                    ) : (
+                        <Grid container>
+                            <Grid item lg={4}>
+                                <Branding />
+                            </Grid>
+                            <Grid item lg={3}></Grid>
+                            <Grid item lg={1}></Grid>
+                            <Grid item lg={3}></Grid>
+                        </Grid>
+                    )}
                 </Toolbar>
             </AppBar>
             {isSmallScreen && (
@@ -135,7 +182,8 @@ export default function ResponsiveDrawer(props: Props) {
                                 '& .MuiDrawer-paper': {
                                     boxSizing: 'border-box',
                                     width: drawerWidth,
-                                    zIndex: 0
+                                    zIndex: 0,
+                                    background: COLORS.darkGray
                                 }
                             }}
                             open

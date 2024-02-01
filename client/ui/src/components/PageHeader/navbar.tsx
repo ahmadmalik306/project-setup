@@ -13,6 +13,7 @@ import ArrowRight from '@mui/icons-material/ArrowRight';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import { NestedMenuItem } from './nested-menu-item';
+import { CaretDown } from '../../assets/icons';
 
 const Navbar = ({ value, index }) => {
     let currentlyHovering = false;
@@ -76,11 +77,20 @@ const Navbar = ({ value, index }) => {
                     onClick={handleClick}
                     onMouseOver={handleClick}
                     onMouseLeave={handleCloseHover}
+                    sx={{ padding: '0px 8px 0px 8px' }}
                 >
                     <ListItemIcon>
                         {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                     </ListItemIcon>
-                    <ListItemText primary={value} />
+                    <ListItemText
+                        primaryTypographyProps={{
+                            sx: {
+                                fontSize: '18px'
+                            }
+                        }}
+                        primary={value}
+                    />
+                    <CaretDown />
                 </ListItemButton>
             </ListItem>
             <Menu

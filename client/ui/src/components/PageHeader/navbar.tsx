@@ -6,7 +6,8 @@ import {
     ListItemIcon,
     ListItemText,
     Menu,
-    MenuItem
+    MenuItem,
+    popoverClasses
 } from '@mui/material';
 import ArrowRight from '@mui/icons-material/ArrowRight';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
@@ -91,6 +92,9 @@ const Navbar = ({ value, index }) => {
                     onMouseEnter: handleHover,
                     onMouseLeave: handleCloseHover,
                     style: { pointerEvents: 'auto', padding: 0 }
+                }}
+                sx={{
+                    [`&.${popoverClasses.root}`]: { pointerEvents: 'none' }
                 }}
                 slotProps={{
                     paper: {

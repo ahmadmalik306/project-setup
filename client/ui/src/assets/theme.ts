@@ -17,6 +17,16 @@ export const theme = createTheme({
                     pointerEvents: 'none'
                 }
             }
+        },
+        MuiDataGrid: {
+            styleOverrides: {
+                actionsCell: {
+                    backgroundColor: 'red'
+                },
+                actionsCellItem: {
+                    backgroundColor: 'blue'
+                }
+            }
         }
     }
 });

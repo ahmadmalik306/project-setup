@@ -10,23 +10,6 @@ export const theme = createTheme({
                     minWidth: '30px'
                 }
             }
-        },
-        MuiPopover: {
-            styleOverrides: {
-                root: {
-                    pointerEvents: 'none'
-                }
-            }
-        },
-        MuiDataGrid: {
-            styleOverrides: {
-                actionsCell: {
-                    backgroundColor: 'red'
-                },
-                actionsCellItem: {
-                    backgroundColor: 'blue'
-                }
-            }
         }
     }
 });

@@ -10,12 +10,12 @@ import { Box } from '@mui/material';
 import { Divider } from '@mui/material';
 import { Drawer } from '@mui/material';
 import { IconButton } from '@mui/material';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import { List } from '@mui/material';
 import { ListItem } from '@mui/material';
 import { ListItemButton } from '@mui/material';
 import { ListItemIcon } from '@mui/material';
 import { ListItemText } from '@mui/material';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
@@ -118,30 +118,32 @@ export default function ResponsiveDrawer(props: Props) {
                 <PageHeader isOpen={mobileOpen} isSmallScreen={isSmallScreen} />
             )}
             <Box display='flex'>
-                <Box
-                    sx={{
-                        width: {
-                            sm: drawerWidth
-                        },
-                        flexShrink: { sm: 0 }
-                    }}
-                    aria-label='mailbox folders'
-                >
-                    <Drawer
-                        variant='permanent'
+                {!isSmallScreen && (
+                    <Box
                         sx={{
-                            display: { xs: 'none', sm: 'block' },
-                            '& .MuiDrawer-paper': {
-                                boxSizing: 'border-box',
-                                width: drawerWidth,
-                                zIndex: 0
-                            }
+                            width: {
+                                sm: drawerWidth
+                            },
+                            flexShrink: { sm: 0 }
                         }}
-                        open
+                        aria-label='mailbox folders'
                     >
-                        {drawer}
-                    </Drawer>
-                </Box>
+                        <Drawer
+                            variant='permanent'
+                            sx={{
+                                display: { xs: 'none', sm: 'block' },
+                                '& .MuiDrawer-paper': {
+                                    boxSizing: 'border-box',
+                                    width: drawerWidth,
+                                    zIndex: 0
+                                }
+                            }}
+                            open
+                        >
+                            {drawer}
+                        </Drawer>
+                    </Box>
+                )}
                 <Box
                     component='main'
                     sx={{

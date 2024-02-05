@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import colors from '@colors';
 import { Box } from '@mui/system';
 import { COLORS } from '@utils';
+import { Button } from '@mui/material';
 type CellProps = {
     backgroundColor?: string;
 };
@@ -28,25 +29,13 @@ export const StyledContainer = styled(Box)<GridProps>`
         .MuiDataGrid-columnHeaders {
             background: ${COLORS.gray};
         }
+        .MuiDataGrid-columnHeader.MuiDataGrid-columnHeader--sortable.MuiDataGrid-withBorderColor {
+            // background: ${COLORS.gray};
+            border-right: 0.081rem solid black;
+        }
         .MuiDataGrid-row {
             >div: nth-last-of-type(2) {
                 border-right: none;
-            }
-        }
-        .MuiDataGrid-detailPanel {
-            .MuiDataGrid-row {
-                border: 0;
-                > div:first-of-type {
-                    border-left: 2px solid secondary.main;
-                }
-                > div:nth-last-of-type(2) {
-                    border-right: none;
-                }
-            }
-            .MuiDataGrid-row:last-child {
-                &:hover {
-                    border-radius: 0 0 25px 25px;
-                }
             }
         }
         .MuiDataGrid-row.Mui-selected {
@@ -65,3 +54,9 @@ export const StyledContainer = styled(Box)<GridProps>`
         }
     }
 `;
+
+export const StyledButton = styled(Button)(({ theme }) => ({
+    color: '#999',
+    paddingRight: 0,
+    paddingLeft: 0
+}));

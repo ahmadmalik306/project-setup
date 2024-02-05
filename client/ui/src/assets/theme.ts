@@ -17,6 +17,26 @@ export const theme = createTheme({
                     minWidth: '30px'
                 }
             }
+        },
+        MuiButton: {
+            styleOverrides: {
+                root: {
+                    textTransform: 'none'
+                }
+            }
+        },
+        MuiPagination: {
+            styleOverrides: {
+                root: {
+                    '.MuiButtonBase-root': {
+                        color: '#999'
+                    },
+                    '.MuiButtonBase-root.Mui-selected': {
+                        color: '#fff',
+                        backgroundColor: `${COLORS.turquoise} !important`
+                    }
+                }
+            }
         }
     }
 });

@@ -9,22 +9,28 @@ export const useDataTable = ({
             toolbarActionsMode = 'client',
             multiSort = false,
             pagination = true
-        }
+        },
+        headerLabel = ''
     }
 }) => {
-    // const SERVER_OPTIONS = {
-    //     useCursorPagination: false
-    // };
     const [backendRows, setBackendRows] = useState([]);
-    const [rowCount, setRowCount] = useState(1);
+    const [rowCount, setRowCount] = useState();
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     const [paginationModel, setPaginationModel] = React.useState({
         page: 1,
-        pageSize: 5
+        pageSize: rowsPerPage
     });
 
     const [fetchOptions, setFetchOptions] = React.useState({
         sort: []
     });
+
+    useEffect(() => {
+        setPaginationModel({
+            page: paginationModel.page,
+            pageSize: rowsPerPage
+        });
+    }, [rowsPerPage]);
 
     useEffect(() => {
         setFetchOptions(
@@ -48,11 +54,6 @@ export const useDataTable = ({
         });
     };
 
-    // const { useQuery, ...data } = createFakeServer({}, SERVER_OPTIONS);
-    // const { isLoading, rows, pageInfo } = useQuery(paginationModel);
-    // const [rowCountState, setRowCountState] = useState(
-    //     pageInfo?.totalRowCount || 0
-    // );
     const fetchAPI = async () => {
         try {
             const resp = await fetch(
@@ -73,8 +74,8 @@ export const useDataTable = ({
     useEffect(() => {
         fetchAPI()
             .then((data) => {
-                setBackendRows(data?.data);
-                setRowCount(data.total);
+                data && setBackendRows(data?.data);
+                data && setRowCount(data.total);
             })
             .catch((err) => console.log({ err }));
     }, [paginationModel]);
@@ -96,14 +97,22 @@ export const useDataTable = ({
                           toolbarActionsMode,
                           paginationModel,
                           setPaginationModel: setPaginationModel,
-                          handleSortModelChange
+                          handleSortModelChange,
+                          rowsPerPage,
+                          setRowsPerPage,
+                          headerLabel
                       }
                     : {
                           tableRows: clientSidePaginationData?.rows,
                           toolbarActionsMode,
-                          rowCount: clientSidePaginationData?.rows?.length,
+                          rowCount: clientSidePaginationData?.rows?.length
+                              ? clientSidePaginationData?.rows?.length
+                              : undefined,
                           paginationModel,
-                          setPaginationModel: setPaginationModel
+                          setPaginationModel: setPaginationModel,
+                          rowsPerPage,
+                          setRowsPerPage,
+                          headerLabel
                       })}
             />
         )

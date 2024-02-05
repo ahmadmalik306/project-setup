@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tooltip, Typography } from '@mui/material';
+import { Box, Tooltip, Typography } from '@mui/material';
 import { useDataTable } from '@hooks';
 
 export const Users = () => {
@@ -86,17 +86,13 @@ export const Users = () => {
     const { dataGrid } = useDataTable({
         directoryConfig: {
             config: {
-                columns: columnsClient,
-                // columns: columnsServer,
-                toolbarActionsMode: 'client',
+                // columns: columnsClient,
+                columns: columnsServer,
+                toolbarActionsMode: 'server',
                 multiSort: false
-            }
+            },
+            headerLabel: 'Employees'
         }
     });
-    return (
-        <div>
-            <Typography sx={{ textAlign: 'center' }}>DATAGRID</Typography>
-            {dataGrid}
-        </div>
-    );
+    return <Box>{dataGrid}</Box>;
 };

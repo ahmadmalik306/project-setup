@@ -5,8 +5,10 @@ import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { DataGridPro } from '@mui/x-data-grid-pro';
-import { Button, Pagination } from '@mui/material';
-import { StyledContainer } from './styles';
+import { Button, Grid, Pagination, Typography } from '@mui/material';
+import { StyledButton, StyledContainer } from './styles';
+import { CustomToolbar } from '@components';
+import { COLORS } from '@utils';
 
 function ApplyFilter(props) {
     const { colDef, setColumnFilters, columnFilters, rows, ...rest } = props;
@@ -83,10 +85,56 @@ export const DataGrid = ({
     paginationModel,
     setPaginationModel,
     toolbarActionsMode,
-    handleSortModelChange
+    handleSortModelChange,
+    rowsPerPage,
+    setRowsPerPage,
+    headerLabel
 }) => {
+    const [firstRender, setFirstRender] = React.useState(true);
     const [rows, setRows] = React.useState(tableRows);
     const [columnFilters, setColumnFilters] = React.useState();
+    const [numberOfPages, setNumberOfPages] = React.useState(
+        Math.ceil(rowCount / paginationModel.pageSize)
+    );
+    console.log({ rows, numberOfPages, columnFilters });
+
+    // React.useEffect(() => {
+    //     // toolbarActionsMode === 'client' &&
+    //     columnFilters &&
+    //         Object.keys(columnFilters).length >= 0 &&
+    //         setNumberOfPages(
+    //             Math.ceil(
+    //                 (toolbarActionsMode === 'client'
+    //                     ? rows?.length
+    //                     : rowCount) / paginationModel.pageSize
+    //             )
+    //         );
+    //     // if(toolbarActionsMode === 'server'){
+
+    //     // }
+    // }, [rows]);
+
+    React.useEffect(() => {
+        firstRender &&
+            rowCount &&
+            paginationModel.pageSize &&
+            setNumberOfPages(Math.ceil(rowCount / paginationModel.pageSize));
+
+        if (!firstRender) {
+            columnFilters &&
+                Object.keys(columnFilters).length >= 0 &&
+                setNumberOfPages(
+                    toolbarActionsMode === 'client'
+                        ? Math.ceil(rows?.length / paginationModel.pageSize)
+                        : Math.ceil(
+                              (Object.keys(columnFilters).length === 0
+                                  ? rowCount
+                                  : rows?.length) / paginationModel.pageSize
+                          )
+                );
+        }
+        rows?.length && setFirstRender(false);
+    }, [rowCount, paginationModel, rows]);
 
     const columnData = React.useMemo(
         () =>
@@ -107,11 +155,18 @@ export const DataGrid = ({
                         )
                     };
                 } else {
-                    return { ...colDef };
+                    return { width: 200, ...colDef };
                 }
             }),
         [columns, tableRows, columnFilters]
     );
+
+    // React.useEffect(() => {
+    //   setPaginationModel({
+    //     page: paginationModel.page
+    //   })
+    // }, [rows])
+
     React.useEffect(() => {
         if (columnFilters) {
             setRows([
@@ -131,32 +186,119 @@ export const DataGrid = ({
     }, [tableRows]);
 
     const CustomPagination = (props) => {
-        const handleLastPageClick = () => {
-            const lastPage = Math.ceil(rowCount / paginationModel.pageSize);
-            props.onChange(null, lastPage);
-        };
+        let showEntries = '';
+        console.log({ columnFilters: props.columnFilters });
+        if (
+            !props.columnFilters ||
+            Object.keys(props.columnFilters).length === 0
+        ) {
+            showEntries = `Showing ${(paginationModel?.page - 1) * paginationModel?.pageSize + 1} to ${Math.min(paginationModel?.page * paginationModel?.pageSize, rowCount)} of ${rowCount} entries`;
+        } else {
+            showEntries = `Showing ${(paginationModel?.page - 1) * paginationModel?.pageSize + 1} of ${rows?.length} entries (filtered from ${rowCount} total entries)`;
+        }
+        console.log({ showEntries });
         return (
-            <>
-                <Button
-                    onClick={() => {
-                        setPaginationModel({
-                            page: 1,
-                            pageSize: paginationModel.pageSize
-                        });
-                        props.onChange(null, 1);
-                    }}
-                >
-                    First
-                </Button>
-                <Pagination
-                    variant='outlined'
-                    shape='rounded'
-                    page={props.page}
-                    count={props.count}
-                    onChange={props.onChange}
-                />
-                <Button onClick={handleLastPageClick}>Last</Button>
-            </>
+            <Grid
+                container
+                justifyContent={'space-between'}
+                alignItems={'center'}
+                mx={0.5}
+            >
+                <Grid item>
+                    {rowCount && <Typography>{showEntries}</Typography>}
+                </Grid>
+                <Grid item>
+                    <Grid
+                        container
+                        // justifyContent={'flex-end'}
+                        // alignItems={'center'}
+                        // mr={0.5}
+                    >
+                        <Grid item>
+                            <StyledButton
+                                onClick={() => {
+                                    setPaginationModel({
+                                        page: 1,
+                                        pageSize: paginationModel.pageSize
+                                    });
+                                    props.onChange(null, 1);
+                                }}
+                                sx={{
+                                    color: '#999'
+                                }}
+                                disabled={paginationModel.page === 1}
+                            >
+                                First
+                            </StyledButton>
+                        </Grid>
+                        <Grid item>
+                            <StyledButton
+                                onClick={() => {
+                                    setPaginationModel({
+                                        page: paginationModel.page - 1,
+                                        pageSize: paginationModel.pageSize
+                                    });
+                                    props.onChange(
+                                        null,
+                                        paginationModel.page - 1
+                                    );
+                                }}
+                                sx={{
+                                    color: '#999'
+                                }}
+                                disabled={paginationModel.page === 1}
+                            >
+                                Previous
+                            </StyledButton>
+                        </Grid>
+                        <Grid item>
+                            <Pagination
+                                shape='rounded'
+                                page={props.page}
+                                count={props.count}
+                                onChange={props.onChange}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <StyledButton
+                                sx={{
+                                    color: '#999'
+                                }}
+                                onClick={() => {
+                                    setPaginationModel({
+                                        page: paginationModel.page + 1,
+                                        pageSize: paginationModel.pageSize
+                                    });
+                                    props.onChange(
+                                        null,
+                                        paginationModel.page + 1
+                                    );
+                                }}
+                                disabled={
+                                    paginationModel.page === numberOfPages
+                                }
+                            >
+                                Next
+                            </StyledButton>
+                        </Grid>
+                        <Grid item>
+                            <StyledButton
+                                sx={{
+                                    color: '#999'
+                                }}
+                                onClick={() =>
+                                    props.onChange(null, props.numberOfPages)
+                                }
+                                disabled={
+                                    paginationModel.page === numberOfPages
+                                }
+                            >
+                                Last
+                            </StyledButton>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Grid>
         );
     };
 
@@ -179,6 +321,14 @@ export const DataGrid = ({
 
     return (
         <StyledContainer>
+            <Typography
+                sx={{
+                    paddingY: 1,
+                    fontSize: '27px'
+                }}
+            >
+                {headerLabel}
+            </Typography>
             <DataGridPro
                 {...(toolbarActionsMode === 'server' && {
                     rowCount: rowCount,
@@ -201,17 +351,25 @@ export const DataGrid = ({
                 rows={rows}
                 columns={columnData}
                 pagination
+                autoHeight={true}
                 paginationMode={toolbarActionsMode}
                 sortingMode={toolbarActionsMode}
                 pageSizeOptions={[5, 10, 25]}
                 slots={{
-                    pagination: CustomPagination
+                    pagination: CustomPagination,
+                    toolbar: CustomToolbar
                 }}
                 slotProps={{
                     pagination: {
                         page: paginationModel?.page,
-                        count: Math.ceil(rowCount / paginationModel?.pageSize),
-                        onChange: handlePaginationChange
+                        count: numberOfPages,
+                        onChange: handlePaginationChange,
+                        numberOfPages,
+                        columnFilters
+                    },
+                    toolbar: {
+                        rowsPerPage,
+                        setRowsPerPage
                     }
                 }}
                 disableColumnFilter

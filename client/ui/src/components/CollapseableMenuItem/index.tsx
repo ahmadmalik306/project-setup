@@ -46,7 +46,7 @@ export const CollapseableMenuItem = ({
             <ListItem
                 key={text}
                 sx={{
-                    padding: '4px 4px',
+                    padding: '4px 16px',
                     minWidth: '400px',
                     justifyContent: 'space-between'
                 }}
@@ -63,7 +63,7 @@ export const CollapseableMenuItem = ({
                             onClick={() => setOpen(!open)}
                             disableRipple
                         >
-                            +
+                            {!open ? '+' : '-'}
                         </StyledButton>
                     </Grid>
                 ) : null}

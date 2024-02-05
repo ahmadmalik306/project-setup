@@ -74,4 +74,5 @@ export const StyledButton = styled(Button)`
     border-radius: 0;
     min-width: 34px;
     min-height: 34px;
+    color: white;
 `;

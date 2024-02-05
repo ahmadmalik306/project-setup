@@ -17,6 +17,7 @@ type GridProps = {
 };
 export const StyledContainer = styled(Box)<GridProps>`
     max-width: unset;
+    margin-top: 2rem;
     > .MuiDataGrid-root {
         // max-width: ${({ maxWidth }) => (maxWidth ? maxWidth : 950)}px;
         // width: auto;

@@ -152,7 +152,7 @@ export default function ResponsiveDrawer(props: Props) {
             {isSmallScreen && (
                 <PageHeader isOpen={mobileOpen} isSmallScreen={isSmallScreen} />
             )}
-            <Box display='flex'>
+            <Box display={!isSmallScreen ? 'flex' : 'block'}>
                 {!isSmallScreen && (
                     <Box
                         sx={{
@@ -183,8 +183,9 @@ export default function ResponsiveDrawer(props: Props) {
                 <Box
                     component='main'
                     sx={{
-                        flexGrow: 1,
-                        padding: `0 15px ${isSmallScreen ? '0' : '0'} 15px`
+                        padding: `0 15px 0 15px`,
+                        height: !isSmallScreen ? 'inherit' : '100vh',
+                        width: '100%'
                     }}
                 >
                     {!isSmallScreen && (
@@ -198,6 +199,10 @@ export default function ResponsiveDrawer(props: Props) {
             </Box>
             <Box
                 sx={{
+                    position: 'sticky',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
                     display: !isSmallScreen ? 'none' : '',
                     flexShrink: { sm: 0 }
                 }}
@@ -205,10 +210,6 @@ export default function ResponsiveDrawer(props: Props) {
                 <BottomNavigation
                     showLabels
                     sx={{
-                        position: 'fixed',
-                        bottom: 55,
-                        left: 0,
-                        right: 0,
                         border: 1,
                         borderColor: 'gray'
                     }}
@@ -233,10 +234,6 @@ export default function ResponsiveDrawer(props: Props) {
                 <BottomNavigation
                     showLabels
                     sx={{
-                        position: 'fixed',
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
                         border: 1,
                         borderColor: 'gray'
                     }}

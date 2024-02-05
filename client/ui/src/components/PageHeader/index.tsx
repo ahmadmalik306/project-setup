@@ -95,7 +95,16 @@ export const PageHeader = ({
             {isSmallScreen ? (
                 <CollapseMenu isOpen={isOpen} component={drawer} />
             ) : (
-                <Box sx={{ background: COLORS.lightGray }}>{drawer}</Box>
+                <Box
+                    sx={{
+                        background: COLORS.lightGray,
+                        position: 'fixed',
+                        zIndex: 1,
+                        width: '100%'
+                    }}
+                >
+                    {drawer}
+                </Box>
             )}
         </>
     );

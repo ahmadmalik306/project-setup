@@ -1,42 +1,99 @@
 import * as React from 'react';
-import { Box, List } from '@mui/material';
+import { Box, List, ListItem } from '@mui/material';
 import { Divider } from '@mui/material';
-import { AnimatedCollapse, Content } from './styles';
 import { COLORS } from '../../utils';
 import { Navbar } from './navbar';
-
-export const PageHeader = ({ isOpen, isSmallScreen }) => {
-    const contentRef = React.useRef(null);
-    const [contentHeight, setContentHeight] = React.useState(0);
-    // Measure content height on component mount and whenever isOpen changes
-    React.useEffect(() => {
-        if (contentRef.current) {
-            setContentHeight(contentRef.current.scrollHeight);
+import { CollapseMenu, CollapseableMenuItem } from '../CollapseableMenuItem';
+import {
+    faFolderOpen,
+    faTaxi,
+    faUsers,
+    faFile
+} from '@fortawesome/free-solid-svg-icons';
+export const PageHeader = ({
+    isOpen,
+    isSmallScreen
+}: {
+    isOpen: boolean;
+    isSmallScreen: boolean;
+}) => {
+    const menu = [
+        {
+            label: 'Content',
+            icon: faFolderOpen,
+            subMenu: [
+                {
+                    label: 'Pages',
+                    icon: faFolderOpen
+                },
+                {
+                    label: 'Reports',
+                    icon: faFolderOpen
+                }
+            ]
+        },
+        {
+            label: 'Applications',
+            icon: faTaxi,
+            subMenu: [
+                {
+                    label: 'Calendar',
+                    icon: faTaxi
+                },
+                {
+                    label: 'DMS',
+                    subMenu: [
+                        {
+                            label: 'Home Documents',
+                            icon: faFile,
+                            subMenu: [
+                                {
+                                    label: 'Placeholder',
+                                    icon: faFile
+                                }
+                            ]
+                        }
+                    ],
+                    icon: faTaxi
+                }
+            ]
+        },
+        {
+            label: 'People',
+            icon: faUsers,
+            subMenu: [
+                {
+                    label: 'Customers',
+                    icon: faUsers
+                }
+            ]
         }
-    }, [isOpen]);
+    ];
     const drawer = (
         <Box sx={{ margin: 0, marginBottom: 1 }}>
             <Divider />
-            <List sx={isSmallScreen ? {} : { display: 'flex' }} disablePadding>
-                {['Content', 'Applications', 'People']?.map((value, index) => (
-                    <Navbar value={value} index={index} />
-                ))}
+            <List sx={!isSmallScreen ? { display: 'flex' } : {}} disablePadding>
+                {isSmallScreen
+                    ? menu?.map((value, index) => (
+                          <CollapseableMenuItem
+                              text={value?.label}
+                              index={index}
+                              menu={value}
+                              key={index}
+                          />
+                      ))
+                    : menu?.map((value, index) => (
+                          <Navbar value={value} index={index} key={index} />
+                      ))}
             </List>
+
             <Divider />
         </Box>
     );
     return (
         <>
             {isSmallScreen ? (
-                <AnimatedCollapse open={isOpen} height={contentHeight}>
-                    <Content
-                        ref={contentRef}
-                        height={contentHeight}
-                        open={isOpen}
-                    >
-                        {drawer}
-                    </Content>
-                </AnimatedCollapse>
+                <CollapseMenu isOpen={isOpen} component={drawer} />
             ) : (
                 <Box sx={{ background: COLORS.lightGray }}>{drawer}</Box>
             )}

@@ -9,13 +9,41 @@ import {
     MenuItem,
     popoverClasses
 } from '@mui/material';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ArrowRight from '@mui/icons-material/ArrowRight';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import { NestedMenuItem } from './nested-menu-item';
 import { CaretDown } from '../../assets/icons';
-
-const Navbar = ({ value, index }) => {
+import { MenuType } from '../CollapseableMenuItem';
+const renderMenus = (
+    menu: Array<MenuType>,
+    onClick: (value: string) => void
+) => {
+    const dropDownData = [];
+    if (!menu) return [];
+    for (const menuItem of menu) {
+        if (menuItem.subMenu?.length) {
+            dropDownData.push(
+                <NestedMenuItem
+                    label={menuItem?.label}
+                    rightIcon={<ArrowRight />}
+                    menu={renderMenus(menuItem?.subMenu, onClick)}
+                />
+            );
+        } else {
+            dropDownData.push(
+                <MenuItem
+                    onClick={() => {
+                        onClick(menuItem?.value);
+                    }}
+                >
+                    {menuItem?.label}
+                </MenuItem>
+            );
+        }
+    }
+    return dropDownData;
+};
+const Navbar = ({ value, index }: { value: MenuType; index: number }) => {
     let currentlyHovering = false;
     // const styles = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -70,6 +98,8 @@ const Navbar = ({ value, index }) => {
                 : props.children
         );
     };
+    const dropDownData = renderMenus(value?.subMenu, handleClose);
+
     return (
         <div>
             <ListItem key={value} disablePadding>
@@ -79,8 +109,8 @@ const Navbar = ({ value, index }) => {
                     onMouseLeave={handleCloseHover}
                     sx={{ padding: '0px 8px 0px 8px' }}
                 >
-                    <ListItemIcon>
-                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                    <ListItemIcon sx={{ minWidth: '25px' }}>
+                        <FontAwesomeIcon icon={value?.icon} />
                     </ListItemIcon>
                     <ListItemText
                         primaryTypographyProps={{
@@ -88,7 +118,7 @@ const Navbar = ({ value, index }) => {
                                 fontSize: '18px'
                             }
                         }}
-                        primary={value}
+                        primary={value?.label}
                     />
                     <CaretDown />
                 </ListItemButton>
@@ -114,77 +144,9 @@ const Navbar = ({ value, index }) => {
                         }
                     }
                 }}
-                getContentAnchorEl={null}
                 anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
             >
-                {React.Children.map(
-                    [
-                        <NestedMenuItem
-                            label='New'
-                            rightIcon={<ArrowRight />}
-                            menu={[
-                                <MenuItem
-                                    sx={{
-                                        borderBottom: '0.5px solid Gray',
-                                        padding: '4px 16px'
-                                    }}
-                                    onClick={handleClose}
-                                >
-                                    Profile
-                                </MenuItem>,
-                                <MenuItem onClick={handleClose}>
-                                    My account
-                                </MenuItem>,
-                                <MenuItem onClick={handleClose}>
-                                    Logout
-                                </MenuItem>
-                            ]}
-                        />,
-                        <NestedMenuItem
-                            label='New1'
-                            rightIcon={<ArrowRight />}
-                            menu={[
-                                <MenuItem
-                                    sx={{
-                                        borderBottom: '0.5px solid Gray',
-                                        padding: '4px 16px'
-                                    }}
-                                    onClick={handleClose}
-                                >
-                                    Profile
-                                </MenuItem>,
-                                <MenuItem onClick={handleClose}>
-                                    My account
-                                </MenuItem>,
-                                <MenuItem onClick={handleClose}>
-                                    Logout
-                                </MenuItem>
-                            ]}
-                        />,
-                        <NestedMenuItem
-                            label='New2'
-                            rightIcon={<ArrowRight />}
-                            menu={[
-                                <MenuItem
-                                    sx={{
-                                        borderBottom: '0.5px solid Gray',
-                                        padding: '4px 16px'
-                                    }}
-                                    onClick={handleClose}
-                                >
-                                    Profile
-                                </MenuItem>,
-                                <MenuItem onClick={handleClose}>
-                                    My account
-                                </MenuItem>,
-                                <MenuItem onClick={handleClose}>
-                                    Logout
-                                </MenuItem>
-                            ]}
-                        />
-                    ],
-                    renderMenu
-                )}
+                {React.Children.map(dropDownData, renderMenu)}
             </Menu>
         </div>
     );

@@ -74,19 +74,8 @@ export const NestedMenuItem = React.forwardRef((props, ref) => {
             event.stopPropagation();
         }
 
-        const active = containerRef.current?.ownerDocument?.activeElement;
-
         if (event.key === 'ArrowLeft' && isSubmenuFocused()) {
             containerRef.current?.focus();
-        }
-
-        if (
-            event.key === 'ArrowRight' &&
-            event.target === containerRef.current &&
-            event.target === active
-        ) {
-            const firstChild = menuContainerRef.current?.children[0];
-            firstChild?.focus();
         }
     };
 
@@ -101,7 +90,7 @@ export const NestedMenuItem = React.forwardRef((props, ref) => {
         <div
             {...ContainerProps}
             ref={containerRef}
-            // onFocus={handleFocus}
+            onFocus={handleFocus}
             tabIndex={tabIndex}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}

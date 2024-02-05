@@ -105,18 +105,6 @@ export default function ResponsiveDrawer(props: Props) {
                 )}
             </List>
             <Divider />
-            <List>
-                {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                    <ListItem key={text} disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                            </ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItemButton>
-                    </ListItem>
-                ))}
-            </List>
         </Box>
     );
     const containerRef = React.useRef<HTMLElement>(null);
@@ -196,7 +184,7 @@ export default function ResponsiveDrawer(props: Props) {
                     component='main'
                     sx={{
                         flexGrow: 1,
-                        padding: `0 15px ${isSmallScreen ? '100px' : '0'} 15px`
+                        padding: `0 15px ${isSmallScreen ? '0' : '0'} 15px`
                     }}
                 >
                     {!isSmallScreen && (
